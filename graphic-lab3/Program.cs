@@ -207,54 +207,33 @@ namespace graphic_lab3 {
         }
 
         static void Main(string[] args)
-		{
+        {
             ConsoleInput input = new ConsoleInput();
             input.RequestData();
             Vector2f[] pointsTriangleA = input.GetTrianglePoints(new Vector2f(offset, height - offset));
             Vector2f[] pointsTriangleB = input.GetTrianglePoints(new Vector2f(offset * 2 + input.baseLength, height - offset));
             var renderWindow = new RenderWindow(new SFML.Window.VideoMode(width, height), "Test");
             renderWindow.SetVerticalSyncEnabled(true);
-
-            List<Vector2f[]> triangles = SplitTriangleWithMedians(pointsTriangleA);
-
-            List<Vector2f> centers = new List<Vector2f>();
+            ConstractLabFigure(pointsTriangleA, drawLine, recursiveFill);
+            ConstractLabFigure(pointsTriangleB, ddaLine, scanningLineFill);
 
 
-            CreateTriangle(pointsTriangleA, drawLine, recursiveFill);
-            foreach (var triangle in triangles)
-            {
-                centers.Add(GetMediansIntersection(triangle));
-                List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
-                foreach (var microTriangle in microTriangles)
-                {
-                    CreateTriangle(microTriangle, drawLine, recursiveFill);
-                }
-            }
-
-            ddaLine(centers[5], centers[0], SFML.Graphics.Color.Blue);
-            ddaLine(centers[0], centers[1], SFML.Graphics.Color.Blue);
-            ddaLine(centers[1], centers[2], SFML.Graphics.Color.Blue);
-            ddaLine(centers[2], centers[3], SFML.Graphics.Color.Blue);
-            ddaLine(centers[3], centers[4], SFML.Graphics.Color.Blue);
-            ddaLine(centers[4], centers[5], SFML.Graphics.Color.Blue);
-
-
-            foreach (var triangle in triangles)
-            {
-                List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
-                foreach (var microTriangle in microTriangles)
-                {
-                    List<Vector2f[]> microMicroTriangles = SplitTriangleWithMedians(microTriangle);
-                    foreach (var microMicroTriangle in microMicroTriangles)
-                    {
-                        List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
-                        foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
-                        {
-                            CreateTriangle(microMicroMicroTriangle, ddaLine, metricScanningLineFill);
-                        }
-                    }
-                }
-            }
+            /* foreach (var triangle in triangles)
+             {
+                 List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
+                 foreach (var microTriangle in microTriangles)
+                 {
+                     List<Vector2f[]> microMicroTriangles = SplitTriangleWithMedians(microTriangle);
+                     foreach (var microMicroTriangle in microMicroTriangles)
+                     {
+                         List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
+                         foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
+                         {
+                             CreateTriangle(microMicroMicroTriangle, ddaLine, metricScanningLineFill);
+                         }
+                     }
+                 }
+             }*/
 
 
             Image image = new Image(colors);
@@ -267,6 +246,31 @@ namespace graphic_lab3 {
                 renderWindow.Clear(SFML.Graphics.Color.Black);
                 renderWindow.Draw(sprite);
                 renderWindow.Display();
+            }
+
+            static void ConstractLabFigure(Vector2f[] trianglePoints, Action<Vector2f, Vector2f, SFML.Graphics.Color> drawLine, Action<Vector2i, SFML.Graphics.Color, SFML.Graphics.Color> fillArea)
+            {
+                List<Vector2f[]> triangles = SplitTriangleWithMedians(trianglePoints);
+                List<Vector2f> centers = new List<Vector2f>();
+
+                CreateTriangle(trianglePoints, drawLine, fillArea);
+                foreach (var triangle in triangles)
+                {
+                    centers.Add(GetMediansIntersection(triangle));
+                    List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
+                    foreach (var microTriangle in microTriangles)
+                    {
+                        CreateTriangle(microTriangle, drawLine, fillArea);
+                    }
+                }
+
+                Vector2f previousPoint = centers[5];
+
+                for (int i = 0; i < centers.Count; i++)
+                {
+                    ddaLine(previousPoint, centers[i], SFML.Graphics.Color.Blue);
+                    previousPoint = centers[i];
+                }
             }
         }
     }

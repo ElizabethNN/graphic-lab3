@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {}
+    "D:\\git\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {
+    "D:\\git\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
+        "projectUniqueName": "D:\\git\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
         "projectName": "graphic-lab3",
-        "projectPath": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
-        "packagesPath": "C:\\Users\\ElizabethNN\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\obj\\",
+        "projectPath": "D:\\git\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
+        "packagesPath": "C:\\Users\\Danila\\.nuget\\packages\\",
+        "outputPath": "D:\\git\\graphic-lab3\\graphic-lab3\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\CodeEditors\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ElizabethNN\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Danila\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -30,7 +26,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -42,7 +37,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "SFML.Net": {
               "target": "Package",
@@ -55,8 +49,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -65,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }
