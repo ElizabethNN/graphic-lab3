@@ -11,13 +11,24 @@ using System.Threading;
 namespace graphic_lab3 {
 	internal class Program {
 
-        static Color[,] colors = new SFML.Graphics.Color[800, 800];
+        static uint width = 800;
+        static uint height = 800;
+        static uint offset = 20;
 
-        static void drawLine(Vector2i start, Vector2i end, Color color) {
+        static Color[,] colors = new SFML.Graphics.Color[width, height];
 
-            double k = (end.Y - start.Y) * 1.0 / (end.X - start.X);
+
+        static void drawLine(Vector2f start, Vector2f end, Color color) {
+
+            if (start.X > end.X || (start.X == end.X && start.Y > end.Y))
+            {
+                (start, end) = (end, start);
+            }
+
+            double k = (end.Y - start.Y) / (end.X - start.X);
             double x = start.X;
             double y = start.Y;
+
             if (k == Double.PositiveInfinity || k == Double.NegativeInfinity)
             {
                 while (y != end.Y)
@@ -38,7 +49,6 @@ namespace graphic_lab3 {
         }
 
         static void ddaLine(Vector2f start, Vector2f end, Color color) {
-
             Vector2i startRounded = new Vector2i((int)Math.Round(start.X), (int) Math.Round(start.Y));
             Vector2i endRounded = new Vector2i((int)Math.Round(end.X), (int)Math.Round(end.Y));
             int L = Math.Max(Math.Abs(endRounded.X - startRounded.X), Math.Abs(endRounded.Y - startRounded.Y));
@@ -74,29 +84,147 @@ namespace graphic_lab3 {
             }   
         }
 
-        static void scanningLineFill(Vector2i start, Color fillColor, Color borderColor) {
+        static void scanningLineFill(Vector2i startPoint, Color fillColor, Color borderColor) {
 
-            int left = start.X, right = start.X;
-            while (left > 0 && colors[left, start.Y] != borderColor)
+            int left = startPoint.X, right = startPoint.X;
+            while (left > 0 && colors[left, startPoint.Y] != borderColor)
                 left--;
-            while (right < colors.GetLength(0) && colors[right, start.Y] != borderColor)
+            while (right < colors.GetLength(0) && colors[right, startPoint.Y] != borderColor)
                 right++;
-            drawLine(new Vector2i(left, start.Y), new Vector2i(right, start.Y), fillColor);
+            drawLine(new Vector2f(left, startPoint.Y), new Vector2f(right, startPoint.Y), fillColor);
             for (int i = left; i < right; i++) {
-                if (colors.GetLength(1) - 1 > start.Y && colors[i, start.Y + 1] != borderColor && colors[i, start.Y + 1] != fillColor)
-                    scanningLineFill(new Vector2i(i, start.Y + 1), fillColor, borderColor);
-                if (start.Y >= 1 && colors[i, start.Y - 1] != borderColor && colors[i, start.Y - 1] != fillColor)
-                    scanningLineFill(new Vector2i(i, start.Y + 1), fillColor, borderColor);
+                if (colors.GetLength(1) - 1 > startPoint.Y && colors[i, startPoint.Y + 1] != borderColor && colors[i, startPoint.Y + 1] != fillColor)
+                    scanningLineFill(new Vector2i(i, startPoint.Y + 1), fillColor, borderColor);
+                if (startPoint.Y >= 1 && colors[i, startPoint.Y - 1] != borderColor && colors[i, startPoint.Y - 1] != fillColor)
+                    scanningLineFill(new Vector2i(i, startPoint.Y + 1), fillColor, borderColor);
             }
+        }
+
+        static void CreateTriangle(Vector2f[] points, Action<Vector2f, Vector2f, Color> drawLine, Action<Vector2i, Color, Color> fillArea)
+        {
+            if (points.Length != 3)
+            {
+                Console.WriteLine("Треугольник строится по 3 точкам");
+                return;
+            }
+
+            drawLine(points[0], points[1], Color.Red);
+            drawLine(points[2], points[1], Color.Red);
+            drawLine(points[2], points[0], Color.Red);
+
+            Vector2i center = (Vector2i)GetMediansIntersection(points);
+            fillArea(center, Color.Yellow, Color.Red);
+        }
+
+        static Vector2f GetLineMiddle(Vector2f start, Vector2f end)
+        {
+            float midX = (start.X + end.X) / 2;
+            float midY = (start.Y + end.Y) / 2;
+            return new Vector2f(midX, midY);
+        }
+
+        static List<Vector2f[]> SplitTriangleWithMedians(Vector2f[] points)
+        {
+
+            List<Vector2f[]> triangles = new List<Vector2f[]>();
+
+            Vector2f center = GetMediansIntersection(points);
+
+            Vector2f[] sideMiddles = {
+                GetLineMiddle(points[0], points[1]),
+                GetLineMiddle(points[1], points[2]),
+                GetLineMiddle(points[2], points[0])
+            };
+
+            Vector2f currentMiddle = sideMiddles[2];
+            for (int i=0; i<points.Length; i++)
+            {
+                Vector2f[] triangle1 =
+                {
+                    center,
+                    points[i],
+                    currentMiddle
+                };
+
+                triangles.Add(triangle1);
+
+                currentMiddle = sideMiddles[i];
+
+                Vector2f[] triangle2 =
+{
+                    center,
+                    points[i],
+                    currentMiddle
+                };
+
+                triangles.Add(triangle2);
+            }
+
+            return triangles;
+        }
+
+        static Vector2f GetMediansIntersection(Vector2f[] points)
+        {
+            if (points.Length != 3)
+            {
+                Console.WriteLine("Это не координаты вершин треугольника!");
+                return new Vector2f(0, 0);
+            }
+
+            float intesectionX = (points[0].X + points[1].X + points[2].X) / 3;
+            float intesectionY = (points[0].Y + points[1].Y + points[2].Y) / 3;
+            return new Vector2f(intesectionX, intesectionY);
         }
 
         static void Main(string[] args)
 		{
-            var renderWindow = new RenderWindow(new SFML.Window.VideoMode(800, 800), "Test");
+            ConsoleInput input = new ConsoleInput();
+            input.RequestData();
+            Vector2f[] pointsTriangleA = input.GetTrianglePoints(new Vector2f(offset, height - offset));
+            Vector2f[] pointsTriangleB = input.GetTrianglePoints(new Vector2f(offset * 2 + input.baseLength, height - offset));
+            var renderWindow = new RenderWindow(new SFML.Window.VideoMode(width, height), "Test");
             renderWindow.SetVerticalSyncEnabled(true);
 
-            ddaLine(new Vector2f(100, 100), new Vector2f(200, 100), Color.Red);
-            drawLine(new Vector2i(100, 200), new Vector2i(200, 200), Color.Red);
+            List<Vector2f[]> triangles = SplitTriangleWithMedians(pointsTriangleA);
+
+            List<Vector2f> centers = new List<Vector2f>();
+
+            foreach (var triangle in triangles)
+            {
+                centers.Add(GetMediansIntersection(triangle));
+                List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
+                foreach (var microTriangle in microTriangles)
+                {
+                    CreateTriangle(microTriangle, ddaLine, recursiveFill);
+                }
+            }
+
+            drawLine(centers[5], centers[0], Color.Blue);
+            drawLine(centers[0], centers[1], Color.Blue);
+            drawLine(centers[1], centers[2], Color.Blue);
+            drawLine(centers[2], centers[3], Color.Blue);
+            drawLine(centers[3], centers[4], Color.Blue);
+            drawLine(centers[4], centers[5], Color.Blue);
+
+
+
+            //foreach (var triangle in triangles)
+            //{
+            //    List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
+            //    foreach (var microTriangle in microTriangles)
+            //    {
+            //        List<Vector2f[]> microMicroTriangles = SplitTriangleWithMedians(microTriangle);
+            //        foreach (var microMicroTriangle in microMicroTriangles)
+            //        {
+            //            List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
+            //            foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
+            //            {
+            //                CreateTriangle(microMicroMicroTriangle, ddaLine, recursiveFill);
+            //            }
+            //        }
+            //    }
+            //}
+
 
             Image image = new Image(colors);
             Texture texture = new Texture(image);
