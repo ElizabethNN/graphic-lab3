@@ -2,9 +2,11 @@
 using SFML.System;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Numerics;
 using System.Threading;
 
@@ -15,10 +17,10 @@ namespace graphic_lab3 {
         static uint height = 800;
         static uint offset = 20;
 
-        static Color[,] colors = new SFML.Graphics.Color[width, height];
+        static SFML.Graphics.Color[,] colors = new SFML.Graphics.Color[width, height];
 
 
-        static void drawLine(Vector2f start, Vector2f end, Color color) {
+        static void drawLine(Vector2f start, Vector2f end, SFML.Graphics.Color color) {
             if (start.X > end.X || (start.X == end.X && start.Y > end.Y))
             {
                 (start, end) = (end, start);
@@ -51,7 +53,33 @@ namespace graphic_lab3 {
             }
         }
 
-        static void ddaLine(Vector2f start, Vector2f end, Color color) {
+        static void metricDdaLine(Vector2f start, Vector2f end, SFML.Graphics.Color color) {
+            var checkpoint = DateTime.Now.Ticks;
+            ddaLine(start, end, color);
+            Console.WriteLine("DDA Line ticks: " + (DateTime.Now.Ticks - checkpoint).ToString());
+        }
+
+        static void metricDrawLine(Vector2f start, Vector2f end, SFML.Graphics.Color color)
+        {
+            var checkpoint = DateTime.Now.Ticks;
+            drawLine(start, end, color);
+            Console.WriteLine("Draw Line ticks: " + (DateTime.Now.Ticks - checkpoint).ToString());
+        }
+
+        static void metricRecursiveFill(Vector2i startPoint, SFML.Graphics.Color fillColor, SFML.Graphics.Color borderColor) {
+            var checkpoint = DateTime.Now.Ticks;
+            recursiveFill(startPoint, fillColor, borderColor);
+            Console.WriteLine("Recursive fill ticks: " + (DateTime.Now.Ticks - checkpoint).ToString());
+        }
+
+        static void metricScanningLineFill(Vector2i startPoint, SFML.Graphics.Color fillColor, SFML.Graphics.Color borderColor)
+        {
+            var checkpoint = DateTime.Now.Ticks;
+            scanningLineFill(startPoint, fillColor, borderColor);
+            Console.WriteLine("Scanning line fill ticks: " + (DateTime.Now.Ticks - checkpoint).ToString());
+        }
+
+        static void ddaLine(Vector2f start, Vector2f end, SFML.Graphics.Color color) {
             Vector2i startRounded = new Vector2i((int)Math.Round(start.X), (int) Math.Round(start.Y));
             Vector2i endRounded = new Vector2i((int)Math.Round(end.X), (int)Math.Round(end.Y));
             int L = Math.Max(Math.Abs(endRounded.X - startRounded.X), Math.Abs(endRounded.Y - startRounded.Y));
@@ -65,7 +93,7 @@ namespace graphic_lab3 {
             }
         }
 
-        static void recursiveFill(Vector2i startPoint, Color fillColor, Color borderColor) {
+        static void recursiveFill(Vector2i startPoint, SFML.Graphics.Color fillColor, SFML.Graphics.Color borderColor) {
             Stack<Vector2i> points = new Stack<Vector2i>();
             points.Push(startPoint);
             while (points.Count != 0) {
@@ -87,7 +115,7 @@ namespace graphic_lab3 {
             }   
         }
 
-        static void scanningLineFill(Vector2i startPoint, Color fillColor, Color borderColor) {
+        static void scanningLineFill(Vector2i startPoint, SFML.Graphics.Color fillColor, SFML.Graphics.Color borderColor) {
             int left = startPoint.X, right = startPoint.X;
             while (left > 0 && colors[left, startPoint.Y] != borderColor)
                 left--;
@@ -102,7 +130,7 @@ namespace graphic_lab3 {
             }
         }
 
-        static void CreateTriangle(Vector2f[] points, Action<Vector2f, Vector2f, Color> drawLine, Action<Vector2i, Color, Color> fillArea)
+        static void CreateTriangle(Vector2f[] points, Action<Vector2f, Vector2f, SFML.Graphics.Color> drawLine, Action<Vector2i, SFML.Graphics.Color, SFML.Graphics.Color> fillArea)
         {
             if (points.Length != 3)
             {
@@ -110,12 +138,12 @@ namespace graphic_lab3 {
                 return;
             }
 
-            drawLine?.Invoke(points[0], points[1], Color.Red);
-            drawLine?.Invoke(points[2], points[1], Color.Red);
-            drawLine?.Invoke(points[2], points[0], Color.Red);
+            drawLine?.Invoke(points[0], points[1], SFML.Graphics.Color.Red);
+            drawLine?.Invoke(points[2], points[1], SFML.Graphics.Color.Red);
+            drawLine?.Invoke(points[2], points[0], SFML.Graphics.Color.Red);
 
             Vector2i center = (Vector2i)GetMediansIntersection(points);
-            fillArea?.Invoke(center, Color.Yellow, Color.Red);
+            fillArea?.Invoke(center, SFML.Graphics.Color.Yellow, SFML.Graphics.Color.Red);
         }
 
         static Vector2f GetLineMiddle(Vector2f start, Vector2f end)
@@ -203,12 +231,12 @@ namespace graphic_lab3 {
                 }
             }
 
-            ddaLine(centers[5], centers[0], Color.Blue);
-            ddaLine(centers[0], centers[1], Color.Blue);
-            ddaLine(centers[1], centers[2], Color.Blue);
-            ddaLine(centers[2], centers[3], Color.Blue);
-            ddaLine(centers[3], centers[4], Color.Blue);
-            ddaLine(centers[4], centers[5], Color.Blue);
+            ddaLine(centers[5], centers[0], SFML.Graphics.Color.Blue);
+            ddaLine(centers[0], centers[1], SFML.Graphics.Color.Blue);
+            ddaLine(centers[1], centers[2], SFML.Graphics.Color.Blue);
+            ddaLine(centers[2], centers[3], SFML.Graphics.Color.Blue);
+            ddaLine(centers[3], centers[4], SFML.Graphics.Color.Blue);
+            ddaLine(centers[4], centers[5], SFML.Graphics.Color.Blue);
 
 
             foreach (var triangle in triangles)
@@ -222,7 +250,7 @@ namespace graphic_lab3 {
                         List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
                         foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
                         {
-                            CreateTriangle(microMicroMicroTriangle, ddaLine, recursiveFill);
+                            CreateTriangle(microMicroMicroTriangle, ddaLine, metricScanningLineFill);
                         }
                     }
                 }
@@ -236,7 +264,7 @@ namespace graphic_lab3 {
             while (renderWindow.IsOpen)
             {
                 renderWindow.DispatchEvents();
-                renderWindow.Clear(Color.Black);
+                renderWindow.Clear(SFML.Graphics.Color.Black);
                 renderWindow.Draw(sprite);
                 renderWindow.Display();
             }

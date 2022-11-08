@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "GiW/HpwSC4TMQW3bTENoU8g+wy5enne5RMAb5Pw4Xd2HvzRdT8iA1glal6WHUpRmX3JRuaQKFYVzJJQVIUK8dA==",
+  "dgSpecHash": "4nvNMto3ly97Oe9g3242N6C7UXU7JwMuSYlstgBo7hH10lasexSEbuHD8hrcz2fn1jQ2R5lYHdUb77tSoK5wuw==",
   "success": true,
-  "projectFilePath": "/Users/dunice/Projects/graphic-lab3/graphic-lab3/graphic-lab3.csproj",
+  "projectFilePath": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
   "expectedPackageFiles": [
-    "/Users/dunice/.nuget/packages/csfml/2.5.0/csfml.2.5.0.nupkg.sha512",
-    "/Users/dunice/.nuget/packages/sfml.audio/2.5.0/sfml.audio.2.5.0.nupkg.sha512",
-    "/Users/dunice/.nuget/packages/sfml.graphics/2.5.0/sfml.graphics.2.5.0.nupkg.sha512",
-    "/Users/dunice/.nuget/packages/sfml.net/2.5.0/sfml.net.2.5.0.nupkg.sha512",
-    "/Users/dunice/.nuget/packages/sfml.system/2.5.0/sfml.system.2.5.0.nupkg.sha512",
-    "/Users/dunice/.nuget/packages/sfml.window/2.5.0/sfml.window.2.5.0.nupkg.sha512"
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512",
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\sfml.audio\\2.5.0\\sfml.audio.2.5.0.nupkg.sha512",
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\sfml.graphics\\2.5.0\\sfml.graphics.2.5.0.nupkg.sha512",
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\sfml.net\\2.5.0\\sfml.net.2.5.0.nupkg.sha512",
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\sfml.system\\2.5.0\\sfml.system.2.5.0.nupkg.sha512",
+    "C:\\Users\\ElizabethNN\\.nuget\\packages\\sfml.window\\2.5.0\\sfml.window.2.5.0.nupkg.sha512"
   ],
   "logs": []
 }

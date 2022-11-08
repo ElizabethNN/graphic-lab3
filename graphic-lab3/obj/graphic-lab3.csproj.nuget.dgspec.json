@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/dunice/Projects/graphic-lab3/graphic-lab3/graphic-lab3.csproj": {}
+    "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {}
   },
   "projects": {
-    "/Users/dunice/Projects/graphic-lab3/graphic-lab3/graphic-lab3.csproj": {
+    "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/dunice/Projects/graphic-lab3/graphic-lab3/graphic-lab3.csproj",
+        "projectUniqueName": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
         "projectName": "graphic-lab3",
-        "projectPath": "/Users/dunice/Projects/graphic-lab3/graphic-lab3/graphic-lab3.csproj",
-        "packagesPath": "/Users/dunice/.nuget/packages/",
-        "outputPath": "/Users/dunice/Projects/graphic-lab3/graphic-lab3/obj/",
+        "projectPath": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\graphic-lab3.csproj",
+        "packagesPath": "C:\\Users\\ElizabethNN\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ElizabethNN\\source\\repos\\graphic-lab3\\graphic-lab3\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\CodeEditors\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/dunice/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\ElizabethNN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -59,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
