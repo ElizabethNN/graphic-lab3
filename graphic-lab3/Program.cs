@@ -143,7 +143,10 @@ namespace graphic_lab3 {
             drawLine?.Invoke(points[2], points[0], SFML.Graphics.Color.Red);
 
             Vector2i center = (Vector2i)GetMediansIntersection(points);
-            fillArea?.Invoke(center, SFML.Graphics.Color.Yellow, SFML.Graphics.Color.Red);
+
+            Random random = new Random();
+
+            fillArea?.Invoke(center, new SFML.Graphics.Color((byte)random.Next(0, 255), (byte)random.Next(0, 255), (byte)random.Next(0, 255)), SFML.Graphics.Color.Red);
         }
 
         static Vector2f GetLineMiddle(Vector2f start, Vector2f end)
@@ -214,7 +217,7 @@ namespace graphic_lab3 {
             Vector2f[] pointsTriangleB = input.GetTrianglePoints(new Vector2f(offset * 2 + input.baseLength, height - offset));
             var renderWindow = new RenderWindow(new SFML.Window.VideoMode(width, height), "Test");
             renderWindow.SetVerticalSyncEnabled(true);
-            ConstractLabFigure(pointsTriangleA, drawLine, recursiveFill);
+            //ConstractLabFigure(pointsTriangleA, drawLine, recursiveFill);
             ConstractLabFigure(pointsTriangleB, ddaLine, scanningLineFill);
 
 
@@ -253,7 +256,7 @@ namespace graphic_lab3 {
                 List<Vector2f[]> triangles = SplitTriangleWithMedians(trianglePoints);
                 List<Vector2f> centers = new List<Vector2f>();
 
-                CreateTriangle(trianglePoints, drawLine, fillArea);
+                CreateTriangle(trianglePoints, drawLine, null);
                 foreach (var triangle in triangles)
                 {
                     centers.Add(GetMediansIntersection(triangle));
