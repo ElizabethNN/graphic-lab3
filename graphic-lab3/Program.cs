@@ -91,7 +91,7 @@ namespace graphic_lab3 {
                 left--;
             while (right < colors.GetLength(0) && colors[right, startPoint.Y] != borderColor)
                 right++;
-            drawLine(new Vector2f(left, startPoint.Y), new Vector2f(right, startPoint.Y), fillColor);
+            ddaLine(new Vector2f(left, startPoint.Y), new Vector2f(right, startPoint.Y), fillColor);
             for (int i = left; i < right; i++) {
                 if (colors.GetLength(1) - 1 > startPoint.Y && colors[i, startPoint.Y + 1] != borderColor && colors[i, startPoint.Y + 1] != fillColor)
                     scanningLineFill(new Vector2i(i, startPoint.Y + 1), fillColor, borderColor);
@@ -199,12 +199,12 @@ namespace graphic_lab3 {
                 }
             }
 
-            drawLine(centers[5], centers[0], Color.Blue);
-            drawLine(centers[0], centers[1], Color.Blue);
-            drawLine(centers[1], centers[2], Color.Blue);
-            drawLine(centers[2], centers[3], Color.Blue);
-            drawLine(centers[3], centers[4], Color.Blue);
-            drawLine(centers[4], centers[5], Color.Blue);
+            ddaLine(centers[5], centers[0], Color.Blue);
+            ddaLine(centers[0], centers[1], Color.Blue);
+            ddaLine(centers[1], centers[2], Color.Blue);
+            ddaLine(centers[2], centers[3], Color.Blue);
+            ddaLine(centers[3], centers[4], Color.Blue);
+            ddaLine(centers[4], centers[5], Color.Blue);
 
 
 
