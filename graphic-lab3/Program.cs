@@ -19,7 +19,6 @@ namespace graphic_lab3 {
 
 
         static void drawLine(Vector2f start, Vector2f end, Color color) {
-
             if (start.X > end.X || (start.X == end.X && start.Y > end.Y))
             {
                 (start, end) = (end, start);
@@ -31,7 +30,7 @@ namespace graphic_lab3 {
 
             if (k == Double.PositiveInfinity || k == Double.NegativeInfinity)
             {
-                while (y != end.Y)
+                while (y < Math.Round(end.Y))
                 {
                     colors[(int)Math.Round(x), (int)Math.Round(y)] = color;
                     y++;
@@ -39,9 +38,13 @@ namespace graphic_lab3 {
             }
             else
             {
-                while (x != end.X)
+                while (x < Math.Round(end.X))
                 {
-                    colors[(int)Math.Round(x), (int)Math.Round(y)] = color;
+                    int startI = (int)Math.Round(Math.Min((int)Math.Round(y), Math.Round(y + k)));
+                    int endI = (int)Math.Round(Math.Max((int)Math.Round(y), Math.Round(y + k)));
+                    for (int i = startI; i <= endI; i++) {
+                        colors[(int)Math.Round(x), i] = color;
+                    }
                     y += k;
                     x++;
                 }
@@ -85,7 +88,6 @@ namespace graphic_lab3 {
         }
 
         static void scanningLineFill(Vector2i startPoint, Color fillColor, Color borderColor) {
-
             int left = startPoint.X, right = startPoint.X;
             while (left > 0 && colors[left, startPoint.Y] != borderColor)
                 left--;
@@ -108,12 +110,12 @@ namespace graphic_lab3 {
                 return;
             }
 
-            drawLine(points[0], points[1], Color.Red);
-            drawLine(points[2], points[1], Color.Red);
-            drawLine(points[2], points[0], Color.Red);
+            drawLine?.Invoke(points[0], points[1], Color.Red);
+            drawLine?.Invoke(points[2], points[1], Color.Red);
+            drawLine?.Invoke(points[2], points[0], Color.Red);
 
             Vector2i center = (Vector2i)GetMediansIntersection(points);
-            fillArea(center, Color.Yellow, Color.Red);
+            fillArea?.Invoke(center, Color.Yellow, Color.Red);
         }
 
         static Vector2f GetLineMiddle(Vector2f start, Vector2f end)
@@ -151,7 +153,7 @@ namespace graphic_lab3 {
                 currentMiddle = sideMiddles[i];
 
                 Vector2f[] triangle2 =
-{
+                {
                     center,
                     points[i],
                     currentMiddle
@@ -189,13 +191,15 @@ namespace graphic_lab3 {
 
             List<Vector2f> centers = new List<Vector2f>();
 
+
+            CreateTriangle(pointsTriangleA, drawLine, recursiveFill);
             foreach (var triangle in triangles)
             {
                 centers.Add(GetMediansIntersection(triangle));
                 List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
                 foreach (var microTriangle in microTriangles)
                 {
-                    CreateTriangle(microTriangle, ddaLine, recursiveFill);
+                    CreateTriangle(microTriangle, drawLine, recursiveFill);
                 }
             }
 
@@ -207,23 +211,22 @@ namespace graphic_lab3 {
             ddaLine(centers[4], centers[5], Color.Blue);
 
 
-
-            //foreach (var triangle in triangles)
-            //{
-            //    List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
-            //    foreach (var microTriangle in microTriangles)
-            //    {
-            //        List<Vector2f[]> microMicroTriangles = SplitTriangleWithMedians(microTriangle);
-            //        foreach (var microMicroTriangle in microMicroTriangles)
-            //        {
-            //            List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
-            //            foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
-            //            {
-            //                CreateTriangle(microMicroMicroTriangle, ddaLine, recursiveFill);
-            //            }
-            //        }
-            //    }
-            //}
+            foreach (var triangle in triangles)
+            {
+                List<Vector2f[]> microTriangles = SplitTriangleWithMedians(triangle);
+                foreach (var microTriangle in microTriangles)
+                {
+                    List<Vector2f[]> microMicroTriangles = SplitTriangleWithMedians(microTriangle);
+                    foreach (var microMicroTriangle in microMicroTriangles)
+                    {
+                        List<Vector2f[]> microMicroMicroTriangles = SplitTriangleWithMedians(microMicroTriangle);
+                        foreach (var microMicroMicroTriangle in microMicroMicroTriangles)
+                        {
+                            CreateTriangle(microMicroMicroTriangle, ddaLine, recursiveFill);
+                        }
+                    }
+                }
+            }
 
 
             Image image = new Image(colors);
